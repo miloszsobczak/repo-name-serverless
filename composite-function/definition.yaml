@@ -1,0 +1,71 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xcompositefunctions.infrastructure.example.org
+spec:
+  group: infrastructure.example.org
+  names:
+    kind: XCompositeFunction
+    plural: xcompositefunctions
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                parameters:
+                  type: object
+                  properties:
+                    location:
+                      type: string
+                      description: "Zone or region for the Function (default: `us-west1-c`)"
+                      enum:
+                        - 'East US'
+                        - 'West US'
+                    tableName:
+                      type: string
+                      description: "The name of the DynamoDB table source being used with this Function"
+                    key:
+                      type: string
+                      description: "The name of the zipfile containing the function code"
+                    handler:
+                      type: string
+                      description: "The entrypoint of the Function execution"
+                apiConfig:
+                  type: object
+                  properties: 
+                    httpMethod:
+                      type: string
+                      description: "The API method to attach with this Function"
+                    apiRootId:
+                      type: string
+                      description: "The ID of the root of the API gateway"
+                    apiParentId:
+                      type: string
+                      description: "The parent ID of the API resource part to attach to (this may be the same as apiRootId)"
+                    authorizerId:
+                      type: string
+                      description: "The ID of the cognito user pool authorizer"
+                    integrationString:
+                      type: string
+                      description: "Bind the API method to the function"
+                userPoolArn:
+                  type: string
+                  description: "The ARN for the Cognito user pool associated with this function"
+              required:
+                - parameters
+                - apiConfig
+            status:
+              type: object
+              properties:
+                invokeArn:
+                  type: string
+                  description: "the ARN of the Function for invocation"
+                apiResourceId:
+                  type: string
+                  description: "the ID of API resource"

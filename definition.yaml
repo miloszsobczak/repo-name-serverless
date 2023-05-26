@@ -1,0 +1,81 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xserverlessapps.infrastructure.example.org
+spec:
+  group: infrastructure.example.org
+  names:
+    kind: XServerlessApp
+    plural: xserverlessapps
+  claimNames:
+    kind: ServerlessApp
+    plural: serverlessapps
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                parameters:
+                  type: object
+                  description: "Function parameters."
+                  properties:
+                    location:
+                      type: string
+                      description: "Zone or region for the Function (default: `us-west1-c`)"
+                      enum:
+                        - 'East US'
+                        - 'West US'
+                    repository:
+                      type: string
+                      description: "The repository where the app source code is hosted"
+                    lambdaBucket:
+                      type: string
+                      description: "The unique name of the S3 bucket hosting the lambda source"
+                  required:
+                    - location
+                    - repository
+                    - lambdaBucket
+              required:
+                - parameters
+            status:
+              type: object
+              properties:
+                eventSourceArn:
+                  description: The eventsourceARN for the dynamoDB
+                  type: string
+                branchName:
+                  description: The Amplify branch name that gets created
+                  type: string
+                domain:
+                  description: The Amplify defaultDomain name that gets created
+                  type: string
+                userPoolArn:
+                  description: The ARN for the cognito user pool
+                  type: string
+                invokeArn:
+                  description: The lambda invocation arn
+                  type: string
+                apiResourceIds:
+                  type: object
+                  properties:
+                    apiRootId:
+                      description: "The ID of the root of the API"
+                      type: string
+                    resourceItemId:
+                      description: "The ID of the /item API"
+                      type: string
+                    resourceItemAtId:
+                      description: "The ID of the /item/{id} API"
+                      type: string
+                    resourceItemAtDoneId:
+                      description: "The ID of the /item/{id}/done API"
+                      type: string
+                    authorizerId:
+                      description: "The ID of the cognito user pool authorizer"
+                      type: string
