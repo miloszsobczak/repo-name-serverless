@@ -27,7 +27,7 @@ spec:
                   properties:
                     location:
                       type: string
-                      description: "Zone or region for the Function (default: `us-west1-c`)"
+                      description: "Zone test or region for the Function (default: `us-west1-c`)"
                       enum:
                         - 'East US'
                         - 'West US'
